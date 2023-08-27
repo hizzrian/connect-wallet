@@ -3,7 +3,7 @@
 import React from 'react';
 
 const ConnectButton: React.FC<{
-  hasProvider: boolean;
+  hasProvider: boolean | null;
   wallet: any;
   isConnecting: boolean;
   disableConnect: boolean;
