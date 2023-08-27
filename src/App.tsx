@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import './App.css'
 import { useState, useEffect } from 'react'
-import { formatBalance, formatChainAsNum } from './utils'
+import { formatBalance } from './utils'
 import detectEthereumProvider from '@metamask/detect-provider'
-
+import Header from './components/Header/Header'
+import Footer from './components/Footer/Footer'
+import ConnectButton from './components/ConnectButton'
+import WalletInfo from './components/WalletInfo'
 const App = () => {
   const [hasProvider, setHasProvider] = useState<boolean | null>(null)
   const initialState = { accounts: [], balance: "", chainId: "" }
@@ -74,44 +78,26 @@ const App = () => {
     })                                                  /* New */
     setIsConnecting(false)                              /* New */
   }
-
-  const disableConnect = Boolean(wallet) && isConnecting
-
+  
   return (
     <div className="App">
-      {/* set center layout */}
+      <Header />
       <div className="overflow-hidden rounded-lg bg-gray-100 p-4 flex justify-center">
-       <div className="px-4 py-5">
-      {/* set background */}
-      {hasProvider ? (
-        <h1 className="text-3xl font-bold underline">MetaMask Installed</h1>
-      ) : (
-        <h1 className="text-3xl font-bold underline">MetaMask Not Installed</h1>
-      )}    
-      {window.ethereum?.isMetaMask && wallet.accounts.length < 1 &&
-                /* Updated */
-        <button className="inline-flex items-center rounded-full border border-transparent bg-indigo-600 p-1 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" disabled={disableConnect} onClick={handleConnect}>Connect MetaMask</button>
-      }
-
-      {wallet.accounts.length > 0 &&
-        <>
-        {/* card using tailwind */}
-          
-            <h1 className="text-3xl font-bold underline">Wallet Connected</h1>
-            <div>Wallet Accounts: {wallet.accounts[0]}</div>
-            <div>Wallet Balance: {wallet.balance}</div>
-            <div>Hex ChainId: {wallet.chainId}</div>
-            <div>Numeric ChainId: {formatChainAsNum(wallet.chainId)}</div>
-        </>
-      }
-      { error && (                                        /* New code block */
-          <div onClick={() => setError(false)}>
-            <strong>Error:</strong> {errorMessage}
-          </div>
-        )
-      }
-        </div>
+        <ConnectButton
+          hasProvider={hasProvider}
+          wallet={wallet}
+          isConnecting={isConnecting}
+          disableConnect={Boolean(wallet) && isConnecting}
+          handleConnect={handleConnect}
+          error={error}
+          errorMessage={errorMessage}
+          setError={setError}
+        />
+        {wallet.accounts.length > 0 && (
+          <WalletInfo wallet={wallet} />
+        )}
       </div>
+      <Footer />
     </div>
   )
 }
