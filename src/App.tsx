@@ -83,7 +83,11 @@ const App = () => {
       <div className="overflow-hidden rounded-lg bg-gray-100 p-4 flex justify-center">
        <div className="px-4 py-5">
       {/* set background */}
-      
+      {hasProvider ? (
+        <h1 className="text-3xl font-bold underline">MetaMask Installed</h1>
+      ) : (
+        <h1 className="text-3xl font-bold underline">MetaMask Not Installed</h1>
+      )}    
       {window.ethereum?.isMetaMask && wallet.accounts.length < 1 &&
                 /* Updated */
         <button className="inline-flex items-center rounded-full border border-transparent bg-indigo-600 p-1 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" disabled={disableConnect} onClick={handleConnect}>Connect MetaMask</button>
